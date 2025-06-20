@@ -15,12 +15,14 @@ use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\AdminDashboardController;
 use App\Http\Controllers\Api\V1\Admin\AdminContentController;
 use App\Http\Controllers\Api\V1\GroupController;
+use App\Http\Controllers\Api\V1\User\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 */
+Route::get('all-users', [StudentAuthController::class, 'getAllUsers']);
 
 Route::post('login', [StudentAuthController::class, 'login']);
 Route::post('signup/student', [StudentAuthController::class, 'signup']);
@@ -178,3 +180,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // Publicly accessible job postings (for students to view)
 Route::apiResource('job-postings', JobPostingController::class)->only(['index', 'show']);
+
+
+
+
+Route::post('/test', [NotificationController::class, 'test']);

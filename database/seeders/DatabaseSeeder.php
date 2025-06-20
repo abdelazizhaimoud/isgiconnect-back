@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             // Demo data
             DemoUsersSeeder::class,
             ConversationSeeder::class,
-            ConversationParticipantSeeder::class,
-            MessageSeeder::class,
+            // ConversationParticipantSeeder::class,
+            // MessageSeeder::class,
             // DemoMediaSeeder::class,
             // DemoContentSeeder::class,
             // PostSeeder::class,

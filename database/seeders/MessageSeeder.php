@@ -11,7 +11,7 @@ class MessageSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Faker::create();
+        $faker = Fak4er::create();
         $conversations = Conversation::with('participants')->get();
 
         if ($conversations->isEmpty()) {

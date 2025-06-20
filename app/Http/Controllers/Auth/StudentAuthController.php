@@ -214,4 +214,19 @@ class StudentAuthController extends Controller
             ], 500);
         }
     }
+
+    public function getAllUsers(Request $request)
+    {
+        try {
+            $users = User::all();
+            return response()->json([
+                'users' => $users,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to retrieve users',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

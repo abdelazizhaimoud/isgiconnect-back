@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    # This names the image for Docker Hub
+    image: highmood2k/isgiconnect-back:latest
+    container_name: isgiconnect-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      # Use :cached for better performance and exclude vendor/storage from the slow host mount
+      - ./:/var/www/html:cached
+      - /var/www/html/vendor
+      - /var/www/html/storage
+    ports:
+      - "8000:80"
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: isgiconnect-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-changeme}
+      MYSQL_USER: ${DB_USERNAME:-user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

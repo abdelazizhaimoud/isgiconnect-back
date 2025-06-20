@@ -8,6 +8,7 @@ use App\Models\System\Activity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Events\TestEvent;
 
 class NotificationController extends ApiController
 {
@@ -711,5 +712,11 @@ class NotificationController extends ApiController
            'exported_at' => now()->toISOString(),
            'count' => $notifications->count(),
        ], 'Notifications exported successfully');
+   }
+
+   public function test(Request $request)
+   {
+       broadcast(new TestEvent($request->message));
+       return 'broadcasted';
    }
 }
