@@ -65,51 +65,54 @@ class StudentAuthController extends Controller
 
     public function signup(SignupRequest $request): JsonResponse
     {
-        try {
-            $validated = $request->validated(
-                [
-                    'name' => ['required', 'string', 'max:255'],
-                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                    'password' => ['required', 'string', 'min:8', 'confirmed'],
-                ]
-            );
-            DB::beginTransaction();
+        return response()->json([
+            'data' => 'signup',
+        ], 200);
+        // try {
+        //     $validated = $request->validated(
+        //         [
+        //             'name' => ['required', 'string', 'max:255'],
+        //             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        //         ]
+        //     );
+        //     DB::beginTransaction();
 
-            // Create username from name (simple approach for MVP)
-            $username = $this->generateUsername($validated['name']);
+        //     // Create username from name (simple approach for MVP)
+        //     $username = $this->generateUsername($validated['name']);
 
-            // Create user
-            $user = User::create([
-                'name' => $validated['name'],
-                'username' => $username,
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'status' => 'active',
-            ]);
+        //     // Create user
+        //     $user = User::create([
+        //         'name' => $validated['name'],
+        //         'username' => $username,
+        //         'email' => $validated['email'],
+        //         'password' => Hash::make($validated['password']),
+        //         'status' => 'active',
+        //     ]);
 
-            // Create user profile
-            Profile::create([
-                'user_id' => $user->id,
-                'first_name' => $this->extractFirstName($validated['name']),
-                'last_name' => $this->extractLastName($validated['name']),
-            ]);
+        //     // Create user profile
+        //     Profile::create([
+        //         'user_id' => $user->id,
+        //         'first_name' => $this->extractFirstName($validated['name']),
+        //         'last_name' => $this->extractLastName($validated['name']),
+        //     ]);
 
-            DB::commit();
+        //     DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Account created successfully',
-            ], 201);
+        //     return response()->json([
+        //         'success' => true,
+        //         'message' => 'Account created successfully',
+        //     ], 201);
 
-        } catch (\Exception $e) {
-            DB::rollBack();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
             
-            return response()->json([
-                'success' => false,
-                'message' => 'Registration failed. Please try again.',
-                'error' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
-        }
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Registration failed. Please try again.',
+        //         'error' => config('app.debug') ? $e->getMessage() : null
+        //     ], 500);
+        // }
     }
 
     /**
