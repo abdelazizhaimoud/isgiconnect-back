@@ -19,6 +19,8 @@ use Database\Factories\User\UserFactory;
 use App\Models\Friend;
 use App\Models\FriendRequest;
 use App\Models\User\Profile;
+use App\Models\Content\Post;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -100,17 +102,9 @@ class User extends Authenticatable
     /**
      * Get posts created by the user.
      */
-        public function contents()
-    {
-        return $this->hasMany(Content::class);
-    }
-
-    /**
-     * Get posts created by the user.
-     */
     public function posts()
     {
-        return $this->hasMany(\App\Models\Content\Post::class);
+        return $this->hasMany(Post::class);
     }
 
     /**
@@ -200,4 +194,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(FriendRequest::class, 'receiver_id');
     }
+
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
 }

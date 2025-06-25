@@ -66,41 +66,32 @@ class StudentAuthController extends Controller
     public function signup(SignupRequest $request): JsonResponse
     {
         try {
+            $validated = $request->validated(
+                [
+                    'name' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                    'password' => ['required', 'string', 'min:8', 'confirmed'],
+                ]
+            );
             DB::beginTransaction();
 
             // Create username from name (simple approach for MVP)
-            $username = $this->generateUsername($request->name);
+            $username = $this->generateUsername($validated['name']);
 
             // Create user
             $user = User::create([
-                'name' => $request->name,
+                'name' => $validated['name'],
                 'username' => $username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
                 'status' => 'active',
             ]);
 
             // Create user profile
             Profile::create([
                 'user_id' => $user->id,
-                'first_name' => $this->extractFirstName($request->name),
-                'last_name' => $this->extractLastName($request->name),
-            ]);
-
-            // Assign default user role (role_id = 6 based on your database)
-            $user->roles()->attach(6, [
-                'assigned_at' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // Generate token for immediate login (MVP approach)
-            $token = $user->createToken('student-token',['can-student-login'],now()->addHour(4))->plainTextToken;
-
-            // For MVP, we'll skip email verification and activate user immediately
-            $user->update([
-                'status' => 'active',
-                'email_verified_at' => now(),
+                'first_name' => $this->extractFirstName($validated['name']),
+                'last_name' => $this->extractLastName($validated['name']),
             ]);
 
             DB::commit();
@@ -108,17 +99,6 @@ class StudentAuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Account created successfully',
-                'data' => [
-                    'user' => [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'username' => $user->username,
-                        'email' => $user->email,
-                        'status' => $user->status,
-                        'profile' => $user->profile,
-                    ],
-                    'token' => $token,
-                ]
             ], 201);
 
         } catch (\Exception $e) {
