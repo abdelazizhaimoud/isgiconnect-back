@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User\User;
 use App\Services\TokenService;
+use App\Http\Requests\Auth\SignupRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\User\Profile;
-use App\Http\Requests\Auth\SignupRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
@@ -63,16 +63,10 @@ class StudentAuthController extends Controller
         }
     }
 
-    public function signup(Request $request): JsonResponse
+    public function signup(SignupRequest $request): JsonResponse
     {
         try {
-            $validated = $request->validated(
-                [
-                    'name' => ['required', 'string', 'max:255'],
-                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                    'password' => ['required', 'string', 'min:8', 'confirmed'],
-                ]
-            );
+            $validated = $request->validated();
             DB::beginTransaction();
 
             // Create username from name (simple approach for MVP)
