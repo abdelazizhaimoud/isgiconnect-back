@@ -63,7 +63,7 @@ class StudentAuthController extends Controller
         }
     }
 
-    public function signup(Request $request): JsonResponse
+    public function signup(SignupRequest $request): JsonResponse
     {
         try {
             $validated = $request->validated(
