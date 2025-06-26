@@ -235,7 +235,7 @@ class ChatController extends BaseController
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->sendError('Failed to send message', 500);
+            return $this->sendError('Failed to send message' . $e->getMessage(), 500);
         }
     }
 
