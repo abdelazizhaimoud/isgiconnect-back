@@ -229,7 +229,7 @@ class ChatController extends BaseController
 
             $infos = 'hada' . $message->sender->name . 'sayfat message l hada'  . $message->replyTo->sender->name;
 
-            broadcast(new TestEvent($infos));
+            broadcast(new TestEvent('test2'));
 
             return $this->sendResponse($responseMessage, 'Message sent successfully', 201);
 
