@@ -716,7 +716,7 @@ class NotificationController extends ApiController
 
    public function test(Request $request)
    {
-       broadcast(new TestEvent($request->message));
+       broadcast(new TestEvent('test'));
        return 'broadcasted';
    }
 }
