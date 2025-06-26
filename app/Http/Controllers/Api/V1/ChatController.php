@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Events\TestEvent;
 
 class ChatController extends BaseController
 {
@@ -225,6 +226,10 @@ class ChatController extends BaseController
                 'is_own_message' => true,
                 'created_at' => $message->created_at,
             ];
+
+            $infos = 'hada' . $message->sender->name . 'sayfat message l hada'  . $message->replyTo->sender->name;
+
+            broadcast(new TestEvent($infos));
 
             return $this->sendResponse($responseMessage, 'Message sent successfully', 201);
 
