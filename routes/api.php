@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\V1\User\NotificationController;
 | API Routes
 |--------------------------------------------------------------------------
 */
-Route::get('all-users', [StudentAuthController::class, 'getAllUsers']);
+Route::get('all-users',[StudentAuthController::class,'getAllUsers']);
 
 Route::post('login', [StudentAuthController::class, 'login']);
 Route::post('signup/student', [StudentAuthController::class, 'signup']);
