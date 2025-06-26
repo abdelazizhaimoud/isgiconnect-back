@@ -227,9 +227,9 @@ class ChatController extends BaseController
                 'created_at' => $message->created_at,
             ];
 
-            $infos = 'hada' . $message->sender->name . 'sayfat message l hada'  . $message->replyTo->sender->name;
+            $infos = 'Message from ' . $message->sender->name . ' to ' . $message->conversation->participants->where('user_id', '!=', $message->sender_id)->first()->user->name . ': ' . $message->content;
 
-            // broadcast(new TestEvent('test2'));
+            broadcast(new TestEvent($infos));
 
             return $this->sendResponse($responseMessage, 'Message sent successfully', 201);
 
